@@ -1,7 +1,7 @@
 path = require 'path'
 
 _ = require 'underscore-plus'
-{OnigRegExp, OnigString} = require 'oniguruma'
+{OnigRegExp} = require 'oniguruma'
 {Emitter} = require 'event-kit'
 Grim = require 'grim'
 
@@ -113,8 +113,8 @@ class Grammar
     else
       line = inputLine
 
-    string = new OnigString(line)
-    stringWithNewLine = if appendNewLine then new OnigString(line + '\n') else string
+    string = line
+    stringWithNewLine = if appendNewLine then line + '\n' else string
 
     if ruleStack?
       ruleStack = ruleStack.slice()
