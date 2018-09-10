@@ -1,6 +1,5 @@
 path = require 'path'
 _ = require 'underscore-plus'
-fs = require 'fs-plus'
 GrammarRegistry = require '../src/grammar-registry'
 Grammar = require '../src/grammar'
 
@@ -34,28 +33,6 @@ describe "Grammar tokenization", ->
       expect(tokens.length).toBe 1
       expect(tokens[0].value).toEqual 'http://github.com'
       expect(tokens[0].scopes).toEqual ['text.plain.null-grammar', 'markup.underline.link.http.hyperlink']
-
-  describe "Registry::loadGrammarSync", ->
-    it "returns a grammar for the file path specified", ->
-      grammar = loadGrammarSync('hello.cson')
-      expect(fs.isFileSync(grammar.path)).toBe true
-      expect(grammar).not.toBeNull()
-
-      {line, tags} = grammar.tokenizeLine('hello world!')
-      tokens = registry.decodeTokens(line, tags)
-      expect(tokens.length).toBe 4
-
-      expect(tokens[0].value).toBe 'hello'
-      expect(tokens[0].scopes).toEqual ['source.hello', 'prefix.hello']
-
-      expect(tokens[1].value).toBe ' '
-      expect(tokens[1].scopes).toEqual ['source.hello']
-
-      expect(tokens[2].value).toBe 'world'
-      expect(tokens[2].scopes).toEqual ['source.hello', 'suffix.hello']
-
-      expect(tokens[3].value).toBe '!'
-      expect(tokens[3].scopes).toEqual ['source.hello', 'suffix.hello', 'emphasis.hello']
 
   describe '::tokenizeLines(text)', ->
     describe 'when the text is empty', ->

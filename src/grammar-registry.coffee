@@ -1,5 +1,4 @@
 _ = require 'underscore-plus'
-CSON = require 'season'
 {Emitter, Disposable} = require 'event-kit'
 Grim = require 'grim'
 
@@ -111,38 +110,6 @@ class GrammarRegistry
     grammar = @grammarForScopeName(scopeName)
     @removeGrammar(grammar) if grammar?
     grammar
-
-  # Public: Read a grammar synchronously but don't add it to the registry.
-  #
-  # * `grammarPath` A {String} absolute file path to a grammar file.
-  #
-  # Returns a {Grammar}.
-  readGrammarSync: (grammarPath) ->
-    grammar = CSON.readFileSync(grammarPath) ? {}
-    if typeof grammar.scopeName is 'string' and grammar.scopeName.length > 0
-      @createGrammar(grammarPath, grammar)
-    else
-      throw new Error("Grammar missing required scopeName property: #{grammarPath}")
-
-  # Public: Read a grammar asynchronously but don't add it to the registry.
-  #
-  # * `grammarPath` A {String} absolute file path to a grammar file.
-  # * `callback` A {Function} to call when read with the following arguments:
-  #   * `error` An {Error}, may be null.
-  #   * `grammar` A {Grammar} or null if an error occured.
-  #
-  # Returns undefined.
-  readGrammar: (grammarPath, callback) ->
-    CSON.readFile grammarPath, (error, grammar={}) =>
-      if error?
-        callback?(error)
-      else
-        if typeof grammar.scopeName is 'string' and grammar.scopeName.length > 0
-          callback?(null, @createGrammar(grammarPath, grammar))
-        else
-          callback?(new Error("Grammar missing required scopeName property: #{grammarPath}"))
-
-    undefined
 
   # Public: Read a grammar synchronously and add it to this registry.
   #
